@@ -220,4 +220,25 @@ class SphericalUtil {
     final t = tan1 * tan2;
     return 2 * atan2(t * sin(deltaLng), 1 + t * cos(deltaLng));
   }
+
+  /// Returns a list of coordinates [from] to [to]
+  /// lower [accuracy]  more the resulting curve
+  /// will be finer but will be higher on computation
+  /// the returned path can be represented as polyline
+  /// on the map
+  static List<LatLng> getAirplanePath(
+      {required LatLng from, required LatLng to, required num accuracy}) {
+    // initialize path with starting point
+    // ignore: omit_local_variable_types
+    final List<LatLng> path = [from];
+    // ignore: omit_local_variable_types
+    num fraction = accuracy;
+    while (accuracy < 1) {
+      final point = interpolate(from, to, fraction);
+      path.add(point);
+      fraction += accuracy;
+    }
+    path.add(to);
+    return path;
+  }
 }
